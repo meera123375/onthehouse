@@ -1,0 +1,148 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>On The House — Cashier V2</title>
+<style>
+:root{--cream:#f4e8d8;--paper:#fff9ef;--burg:#7a3341;--dark:#2b201a;--brown:#654735;--gold:#e0b34f;--muted:#76685f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:radial-gradient(circle at 10% 10%,rgba(122,51,65,.09) 0 2px,transparent 3px) 0 0/24px 24px,var(--cream);color:var(--dark)}
+.wrap{max-width:900px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.logo{font-size:26px;font-weight:1000;color:var(--burg);letter-spacing:-1px}.badge{border:2px solid var(--dark);border-radius:999px;padding:8px 12px;background:var(--paper);font:900 11px monospace;box-shadow:3px 3px 0 var(--dark)}
+.card{background:var(--paper);border:3px solid var(--dark);border-radius:28px;padding:28px;box-shadow:7px 7px 0 var(--dark);margin:18px 0}.center{text-align:center}.sticker{display:inline-block;background:var(--gold);border:2px solid var(--dark);border-radius:999px;padding:7px 12px;font:1000 11px monospace;transform:rotate(-2deg);margin-bottom:14px}
+h1,h2{margin:0;color:var(--burg);font-weight:1000;letter-spacing:-2px}h1{font-size:clamp(44px,8vw,76px);line-height:.9}h2{font-size:30px}p{color:var(--muted);font-weight:700;line-height:1.45}
+input{width:100%;padding:18px;border:3px solid var(--dark);border-radius:16px;background:white;font-size:24px;font-weight:900;text-align:center;outline:none}
+.btn{border:3px solid var(--dark);background:var(--burg);color:white;border-radius:999px;padding:16px 22px;font-weight:1000;font-size:15px;box-shadow:5px 5px 0 var(--dark);cursor:pointer}.btn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--dark)}.btn.secondary{background:var(--paper);color:var(--burg)}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1}.hidden{display:none!important}.msg{min-height:22px;font:800 12px monospace;color:var(--burg);margin-top:12px}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.game{border:3px solid var(--dark);border-radius:22px;background:white;padding:22px 15px;box-shadow:5px 5px 0 var(--dark);cursor:pointer}.game .emoji{font-size:45px}.game b{display:block;color:var(--burg);font-size:18px;margin-top:9px}.game small{color:var(--muted);font-weight:700}
+.list{display:flex;flex-direction:column;gap:9px}.item{border:2px solid var(--dark);border-radius:15px;padding:13px;background:white;display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:10px}.num{font-size:23px;font-weight:1000;color:var(--burg)}.status{font:900 10px monospace}.claim{border:2px solid var(--dark);background:var(--gold);border-radius:999px;padding:9px;font-weight:1000;cursor:pointer}
+.cup{height:330px;width:245px;margin:18px auto;border:6px solid var(--dark);border-radius:18px 18px 55px 55px;background:white;position:relative;overflow:hidden}.liquid{position:absolute;bottom:0;left:0;right:0;height:0;background:var(--brown)}.line{position:absolute;z-index:3;left:8%;right:8%;bottom:67%;height:5px;background:var(--burg)}.line:after{content:"HOUSE LINE";position:absolute;right:0;bottom:8px;background:var(--gold);border:2px solid var(--dark);border-radius:999px;padding:4px 7px;font:900 8px monospace}
+.stackarea{height:350px;border:3px dashed rgba(43,32,26,.25);border-radius:22px;position:relative;background:white;overflow:hidden}.stackcup{position:absolute;width:105px;height:48px;border:4px solid var(--dark);border-radius:8px 8px 18px 18px;background:var(--burg);left:calc(50% - 52px);bottom:10px}.moving{bottom:285px}
+.placeholder{padding:60px 15px;border:3px dashed rgba(43,32,26,.25);border-radius:22px;background:white;font-size:60px}
+@media(max-width:700px){.games{grid-template-columns:1fr}.item{grid-template-columns:75px 1fr}.item>:last-child{grid-column:1/-1}.row{flex-direction:column}}
+
+.drinks{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0}
+.choice{border:3px solid var(--dark);background:white;border-radius:18px;padding:18px 10px;font-weight:1000;color:var(--burg);cursor:pointer;box-shadow:4px 4px 0 var(--dark)}
+.choice.selected{background:var(--burg);color:white;transform:translate(3px,3px);box-shadow:1px 1px 0 var(--dark)}
+.sizes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 18px}
+.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:16px}
+.stat{background:white;border:2px solid var(--dark);border-radius:16px;padding:15px 8px;text-align:center}
+.stat strong{display:block;font-size:27px;color:var(--burg)}.stat span{font:800 9px monospace;color:var(--muted)}
+.breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.breakdown div{background:#f7eddf;border-radius:14px;padding:13px;text-align:center;font-weight:900}
+.order-result{background:#fff1c9;border:3px solid var(--dark);border-radius:18px;padding:18px;text-align:center;margin-top:16px}
+.order-result strong{display:block;font-size:34px;color:var(--burg)}
+.section-title{margin-top:24px}
+@media(max-width:700px){.drinks,.summary-grid{grid-template-columns:1fr}.breakdown{grid-template-columns:1fr 1fr 1fr}}
+</style></head><body>
+<div class="wrap">
+<div class="top"><div class="logo">ON THE HOUSE</div><div class="badge">CASHIER V2</div></div>
+
+<div class="card">
+ <div class="sticker">NEW ORDER</div><h2>What are we making?</h2>
+ <p>Choose a drink and size. The order number is created automatically.</p>
+ <div class="drinks">
+  <button class="choice drink" data-value="Açaí">AÇAÍ</button>
+  <button class="choice drink" data-value="Matcha">MATCHA</button>
+  <button class="choice drink" data-value="V60">V60</button>
+ </div>
+ <div class="sizes">
+  <button class="choice size" data-value="Small">SMALL</button>
+  <button class="choice size" data-value="Regular">REGULAR</button>
+ </div>
+ <button class="btn" id="complete" style="width:100%">COMPLETE ORDER →</button>
+ <div id="msg" class="msg"></div>
+ <div id="orderResult" class="order-result hidden"><span>GIVE CUSTOMER THIS NUMBER</span><strong id="newNumber">#001</strong><small>They enter it at the arcade.</small></div>
+</div>
+
+<div class="card">
+ <div class="sticker">LIVE ORDERS</div><h2>Waiting & results</h2>
+ <div id="list" class="list" style="margin-top:18px"></div>
+</div>
+
+<div class="card">
+ <div class="sticker">TODAY</div><h2>House status</h2>
+ <div class="summary-grid">
+  <div class="stat"><strong id="ordersStat">0</strong><span>ORDERS</span></div>
+  <div class="stat"><strong id="drinksStat">0</strong><span>DRINKS SOLD</span></div>
+  <div class="stat"><strong id="waitingStat">0</strong><span>WAITING</span></div>
+  <div class="stat"><strong id="wonStat">0</strong><span>WINNERS</span></div>
+  <div class="stat"><strong id="claimedStat">0</strong><span>CLAIMED</span></div>
+ </div>
+ <h2 class="section-title">Drink breakdown</h2>
+ <div class="breakdown">
+  <div>AÇAÍ<br><span id="acaiStat">0</span></div>
+  <div>MATCHA<br><span id="matchaStat">0</span></div>
+  <div>V60<br><span id="v60Stat">0</span></div>
+ </div>
+</div>
+</div>
+<script>
+
+const DB="https://on-the-house-f4d6d-default-rtdb.europe-west1.firebasedatabase.app";
+async function fbGet(path){
+  const r=await fetch(`${DB}/${path}.json?ts=${Date.now()}`,{cache:"no-store"});
+  if(!r.ok) throw new Error("Firebase read failed");
+  return await r.json();
+}
+async function fbPut(path,value){
+  const r=await fetch(`${DB}/${path}.json`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(value)});
+  if(!r.ok) throw new Error("Firebase write failed");
+  return await r.json();
+}
+async function fbPatch(path,value){
+  const r=await fetch(`${DB}/${path}.json`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(value)});
+  if(!r.ok) throw new Error("Firebase update failed");
+  return await r.json();
+}
+
+let drink=null,size=null,lastOrders={};
+const msg=document.querySelector("#msg");
+document.querySelectorAll(".drink").forEach(b=>b.onclick=()=>{document.querySelectorAll(".drink").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");drink=b.dataset.value});
+document.querySelectorAll(".size").forEach(b=>b.onclick=()=>{document.querySelectorAll(".size").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");size=b.dataset.value});
+
+async function createOrder(){
+  if(!drink||!size){msg.textContent="Choose a drink and size first.";return}
+  const btn=document.querySelector("#complete"); btn.disabled=true; msg.textContent="Creating order…";
+  try{
+    const counter=(await fbGet("v2/meta/nextOrder")) || 1;
+    const n=String(counter).padStart(3,"0");
+    const order={number:n,drink,size,status:"active",game:null,created:Date.now(),cookieClaimed:false};
+    await fbPut("v2/orders/"+n,order);
+    await fbPut("v2/meta/nextOrder",counter+1);
+    document.querySelector("#newNumber").textContent="#"+n;
+    document.querySelector("#orderResult").classList.remove("hidden");
+    msg.textContent="Order complete — ready for the arcade.";
+    drink=null;size=null;document.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));
+    await render();
+  }catch(e){msg.textContent="Connection error — check internet/Firebase and try again."}
+  finally{btn.disabled=false}
+}
+document.querySelector("#complete").onclick=createOrder;
+
+window.claim=async n=>{
+  try{await fbPatch("v2/orders/"+n,{status:"claimed",cookieClaimed:true,claimedAt:Date.now()});render()}
+  catch(e){alert("Couldn't update Firebase. Try again.")}
+};
+
+function label(x){
+ if(x.status==="active")return "WAITING TO PLAY";
+ if(x.status==="playing")return "PLAYING · "+(x.game||"GAME");
+ if(x.status==="winner")return "🍪 COOKIE WINNER";
+ if(x.status==="claimed")return "✓ COOKIE CLAIMED";
+ if(x.status==="lost")return "FINISHED · NOT A WINNER";
+ return (x.status||"").toUpperCase()
+}
+async function render(){
+ try{
+  const raw=(await fbGet("v2/orders"))||{};
+  const arr=Object.values(raw).sort((a,b)=>(b.created||0)-(a.created||0));
+  lastOrders=raw;
+  const list=document.querySelector("#list");
+  list.innerHTML=arr.length?arr.map(x=>`<div class="item"><div class="num">#${x.number}</div><div><div class="status">${label(x)}</div><small>${x.drink||"—"} · ${x.size||"—"}${x.game?" · "+x.game:""}</small></div>${x.status==="winner"?`<button class="claim" onclick="claim('${x.number}')">CLAIM COOKIE</button>`:""}</div>`).join(""):"<p>No orders yet.</p>";
+  const waiting=arr.filter(x=>x.status==="active"||x.status==="playing").length;
+  const winners=arr.filter(x=>x.status==="winner"||x.status==="claimed").length;
+  const claimed=arr.filter(x=>x.status==="claimed").length;
+  ordersStat.textContent=arr.length;drinksStat.textContent=arr.length;waitingStat.textContent=waiting;wonStat.textContent=winners;claimedStat.textContent=claimed;
+  acaiStat.textContent=arr.filter(x=>x.drink==="Açaí").length;
+  matchaStat.textContent=arr.filter(x=>x.drink==="Matcha").length;
+  v60Stat.textContent=arr.filter(x=>x.drink==="V60").length;
+ }catch(e){ if(!msg.textContent) msg.textContent="Live connection unavailable."; }
+}
+setInterval(render,1200);render();
+
+</script></body></html>

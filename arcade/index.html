@@ -1,0 +1,93 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>OTH Arcade V2</title><style>
+:root{--cream:#f4e8d8;--paper:#fff9ef;--burg:#7a3341;--dark:#2b201a;--brown:#654735;--gold:#e0b34f;--muted:#76685f}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:radial-gradient(circle at 10% 10%,rgba(122,51,65,.09) 0 2px,transparent 3px) 0 0/24px 24px,var(--cream);color:var(--dark)}
+.wrap{max-width:900px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.logo{font-size:26px;font-weight:1000;color:var(--burg);letter-spacing:-1px}.badge{border:2px solid var(--dark);border-radius:999px;padding:8px 12px;background:var(--paper);font:900 11px monospace;box-shadow:3px 3px 0 var(--dark)}
+.card{background:var(--paper);border:3px solid var(--dark);border-radius:28px;padding:28px;box-shadow:7px 7px 0 var(--dark);margin:18px 0}.center{text-align:center}.sticker{display:inline-block;background:var(--gold);border:2px solid var(--dark);border-radius:999px;padding:7px 12px;font:1000 11px monospace;transform:rotate(-2deg);margin-bottom:14px}
+h1,h2{margin:0;color:var(--burg);font-weight:1000;letter-spacing:-2px}h1{font-size:clamp(44px,8vw,76px);line-height:.9}h2{font-size:30px}p{color:var(--muted);font-weight:700;line-height:1.45}
+input{width:100%;padding:18px;border:3px solid var(--dark);border-radius:16px;background:white;font-size:24px;font-weight:900;text-align:center;outline:none}
+.btn{border:3px solid var(--dark);background:var(--burg);color:white;border-radius:999px;padding:16px 22px;font-weight:1000;font-size:15px;box-shadow:5px 5px 0 var(--dark);cursor:pointer}.btn:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--dark)}.btn.secondary{background:var(--paper);color:var(--burg)}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1}.hidden{display:none!important}.msg{min-height:22px;font:800 12px monospace;color:var(--burg);margin-top:12px}
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.game{border:3px solid var(--dark);border-radius:22px;background:white;padding:22px 15px;box-shadow:5px 5px 0 var(--dark);cursor:pointer}.game .emoji{font-size:45px}.game b{display:block;color:var(--burg);font-size:18px;margin-top:9px}.game small{color:var(--muted);font-weight:700}
+.list{display:flex;flex-direction:column;gap:9px}.item{border:2px solid var(--dark);border-radius:15px;padding:13px;background:white;display:grid;grid-template-columns:100px 1fr auto;align-items:center;gap:10px}.num{font-size:23px;font-weight:1000;color:var(--burg)}.status{font:900 10px monospace}.claim{border:2px solid var(--dark);background:var(--gold);border-radius:999px;padding:9px;font-weight:1000;cursor:pointer}
+.cup{height:330px;width:245px;margin:18px auto;border:6px solid var(--dark);border-radius:18px 18px 55px 55px;background:white;position:relative;overflow:hidden}.liquid{position:absolute;bottom:0;left:0;right:0;height:0;background:var(--brown)}.line{position:absolute;z-index:3;left:8%;right:8%;bottom:67%;height:5px;background:var(--burg)}.line:after{content:"HOUSE LINE";position:absolute;right:0;bottom:8px;background:var(--gold);border:2px solid var(--dark);border-radius:999px;padding:4px 7px;font:900 8px monospace}
+.stackarea{height:350px;border:3px dashed rgba(43,32,26,.25);border-radius:22px;position:relative;background:white;overflow:hidden}.stackcup{position:absolute;width:105px;height:48px;border:4px solid var(--dark);border-radius:8px 8px 18px 18px;background:var(--burg);left:calc(50% - 52px);bottom:10px}.moving{bottom:285px}
+.placeholder{padding:60px 15px;border:3px dashed rgba(43,32,26,.25);border-radius:22px;background:white;font-size:60px}
+@media(max-width:700px){.games{grid-template-columns:1fr}.item{grid-template-columns:75px 1fr}.item>:last-child{grid-column:1/-1}.row{flex-direction:column}}
+</style></head><body>
+<div class="wrap"><div class="top"><div class="logo">ON THE HOUSE</div><div id="orderBadge" class="badge">HOUSE ARCADE</div></div>
+<section id="home" class="card center"><div class="sticker">HOUSE ARCADE ★</div><h1>READY TO<br>PLAY?</h1><p>Enter the order number the cashier gave you.</p><input id="orderInput" inputmode="numeric" placeholder="ORDER NUMBER" style="max-width:380px"><br><button class="btn" id="enter" style="margin-top:15px">LET'S PLAY →</button><div id="error" class="msg"></div></section>
+<section id="choose" class="card center hidden"><div class="sticker">PICK ONE GAME</div><h2>One order. One shot.</h2><p>Choose wisely 👀</p><div class="games">
+<div class="game" data-game="Stop the Pour"><div class="emoji">🥤</div><b>STOP THE POUR</b><small>Hit the House Line.</small></div>
+<div class="game" data-game="Cup Stack"><div class="emoji">🥛</div><b>CUP STACK</b><small>Stop the cup in the zone.</small></div>
+<div class="game" data-game="Mystery Game"><div class="emoji">?</div><b>COMING NEXT</b><small>Game 3 slot is ready.</small></div>
+</div></section>
+<section id="pourGame" class="card center hidden"><div class="sticker">STOP THE POUR</div><h2>Hold. Pour. Release.</h2><div class="cup"><div class="line"></div><div id="liquid" class="liquid"></div></div><button id="pourBtn" class="btn">HOLD TO POUR</button></section>
+<section id="stackGame" class="card center hidden"><div class="sticker">CUP STACK</div><h2>Stop it over the stack.</h2><p>Tap once when the moving cup is centered.</p><div class="stackarea"><div class="stackcup"></div><div id="movingCup" class="stackcup moving"></div></div><button id="stackBtn" class="btn" style="margin-top:15px">STOP CUP</button></section>
+<section id="result" class="card center hidden"><div id="resultEmoji" style="font-size:72px">🍪</div><div id="resultSticker" class="sticker">YOU BEAT THE HOUSE</div><h1 id="resultTitle">YOU WON<br>A COOKIE!</h1><p id="resultText">Tell the cashier your order number.</p><button id="finish" class="btn">DONE →</button></section>
+</div><script>
+
+const DB="https://on-the-house-f4d6d-default-rtdb.europe-west1.firebasedatabase.app";
+async function fbGet(path){
+  const r=await fetch(`${DB}/${path}.json?ts=${Date.now()}`,{cache:"no-store"});
+  if(!r.ok) throw new Error("Firebase read failed");
+  return await r.json();
+}
+async function fbPut(path,value){
+  const r=await fetch(`${DB}/${path}.json`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(value)});
+  if(!r.ok) throw new Error("Firebase write failed");
+  return await r.json();
+}
+async function fbPatch(path,value){
+  const r=await fetch(`${DB}/${path}.json`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(value)});
+  if(!r.ok) throw new Error("Firebase update failed");
+  return await r.json();
+}
+
+let current=null,chosen=null,level=0,filling=false,last=0,raf,stackX=0,stackDir=1,stackRaf;
+const ids=["home","choose","pourGame","stackGame","result"];
+function show(id){ids.forEach(x=>document.querySelector("#"+x).classList.toggle("hidden",x!==id))}
+async function patchOrder(values){if(!current)return;await fbPatch("v2/orders/"+current,values)}
+
+document.querySelector("#enter").onclick=async()=>{
+ const err=document.querySelector("#error"); err.textContent="Checking number…";
+ const n=document.querySelector("#orderInput").value.replace(/\D/g,"");
+ if(!n){err.textContent="Enter your order number.";return}
+ try{
+   const x=await fbGet("v2/orders/"+n);
+   if(!x){err.textContent="We can't find that order.";return}
+   if(x.status!=="active"){err.textContent="That number has already been used.";return}
+   current=n;err.textContent="";document.querySelector("#orderBadge").textContent="ORDER #"+n;show("choose");
+ }catch(e){err.textContent="Can't connect right now. Ask the cashier for help."}
+};
+
+document.querySelectorAll(".game").forEach(g=>g.onclick=async()=>{
+ let name=g.dataset.game;if(name==="Mystery Game")return;
+ chosen=name;
+ try{await patchOrder({status:"playing",game:name,startedAt:Date.now()})}
+ catch(e){alert("Connection lost. Please ask the cashier.");return}
+ if(name==="Stop the Pour"){level=0;document.querySelector("#liquid").style.height="0%";show("pourGame")}
+ else{show("stackGame");startStack()}
+});
+
+const pb=document.querySelector("#pourBtn"),liq=document.querySelector("#liquid");
+function pourTick(t){if(!filling)return;if(!last)last=t;level=Math.min(100,level+(t-last)*.02);last=t;liq.style.height=level+"%";if(level>=100)return stopPour();raf=requestAnimationFrame(pourTick)}
+function startPour(e){e.preventDefault();if(filling)return;filling=true;last=0;raf=requestAnimationFrame(pourTick)}
+function stopPour(e){if(e)e.preventDefault();if(!filling)return;filling=false;cancelAnimationFrame(raf);finishGame(Math.abs(level-33)<=2.2)}
+["pointerdown","touchstart"].forEach(x=>pb.addEventListener(x,startPour,{passive:false}));
+["pointerup","pointercancel","pointerleave","touchend"].forEach(x=>pb.addEventListener(x,stopPour,{passive:false}));
+
+function startStack(){stackX=0;stackDir=1;let el=document.querySelector("#movingCup");function go(){stackX+=stackDir*2.3;if(stackX>230||stackX< -230)stackDir*=-1;el.style.transform=`translateX(${stackX}px)`;stackRaf=requestAnimationFrame(go)}go()}
+document.querySelector("#stackBtn").onclick=()=>{cancelAnimationFrame(stackRaf);finishGame(Math.abs(stackX)<25)};
+
+async function finishGame(win){
+ try{await patchOrder({status:win?"winner":"lost",game:chosen,finishedAt:Date.now(),won:win})}
+ catch(e){alert("Result couldn't sync. Please show the cashier this screen.");}
+ document.querySelector("#resultEmoji").textContent=win?"🍪":"🏠";
+ document.querySelector("#resultSticker").textContent=win?"YOU BEAT THE HOUSE":"THE HOUSE WINS";
+ document.querySelector("#resultTitle").innerHTML=win?"YOU WON<br>A COOKIE!":"NOT THIS<br>TIME!";
+ document.querySelector("#resultText").textContent=win?`Order #${current} — show the cashier to claim it.`:`Order #${current} has finished its play.`;
+ show("result")
+}
+document.querySelector("#finish").onclick=()=>{current=null;chosen=null;document.querySelector("#orderInput").value="";document.querySelector("#error").textContent="";document.querySelector("#orderBadge").textContent="HOUSE ARCADE";show("home")};
+
+</script></body></html>
