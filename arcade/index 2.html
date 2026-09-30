@@ -1,0 +1,166 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><title>On The House Arcade</title>
+<style>
+:root{--c:#f5eadb;--p:#fffaf1;--b:#7a3341;--d:#2d2119;--g:#e1b44f;--br:#684a37}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;width:100%;min-height:100%;font-family:Arial,sans-serif;background:var(--c);color:var(--d);touch-action:manipulation}body{background-image:radial-gradient(#7a334117 2px,transparent 2px);background-size:24px 24px}
+.app{min-height:100vh;max-width:980px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center}.logo{font-size:27px;font-weight:1000;color:var(--b);letter-spacing:-1.5px}.ticket{border:3px solid var(--d);background:var(--p);border-radius:999px;padding:9px 14px;box-shadow:3px 3px 0 var(--d);font:900 11px monospace}
+.screen{display:none;min-height:calc(100vh - 65px);align-items:center;justify-content:center}.screen#lobby.on{display:block!important;min-height:0!important;height:auto!important;overflow:visible;margin:0;padding:0}.screen.on{display:flex}.panel{width:min(760px,100%);background:var(--p);border:4px solid var(--d);border-radius:32px;box-shadow:9px 9px 0 var(--d);padding:30px;text-align:center;position:relative;overflow:hidden}.panel:before{content:"★";position:absolute;font-size:100px;color:#7a33410b;right:10px;top:-15px;transform:rotate(15deg)}
+.sticker{display:inline-block;border:3px solid var(--d);border-radius:999px;background:var(--g);padding:8px 13px;font:1000 11px monospace;transform:rotate(-2deg);margin-bottom:15px}h1{font-size:clamp(48px,9vw,84px);line-height:.83;letter-spacing:-5px;color:var(--b);margin:0;font-weight:1000}h2{font-size:36px;letter-spacing:-2px;color:var(--b);margin:0}p{font-weight:800;color:#77685f;line-height:1.45}
+.numberbox{max-width:460px;margin:25px auto 0;background:#ead7c3;border:4px solid var(--d);border-radius:25px;padding:18px;box-shadow:6px 6px 0 var(--d);transform:rotate(.5deg)}.numberbox label{font:1000 11px monospace;letter-spacing:.12em}.numberbox input{width:100%;border:0;background:transparent;text-align:center;font-size:52px;font-weight:1000;color:var(--b);outline:0;padding:5px}
+.backBtn{position:absolute;top:18px;left:18px;z-index:20;border:3px solid var(--d);background:var(--p);color:var(--d);border-radius:999px;padding:10px 15px;font-weight:1000;font-size:12px;box-shadow:4px 4px 0 var(--d);cursor:pointer}.backBtn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--d)}.btn{border:4px solid var(--d);background:var(--b);color:white;border-radius:999px;padding:17px 26px;font-weight:1000;font-size:16px;box-shadow:6px 6px 0 var(--d);cursor:pointer}.btn:active{transform:translate(5px,5px);box-shadow:1px 1px 0 var(--d)}.error{height:20px;color:var(--b);font:900 11px monospace;margin-top:12px}
+.lobby{width:100%;padding:0 0 24px;margin:0}.lobbyhead{text-align:center;margin:0 0 14px;padding-top:0}.games{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-items:stretch}.gamecard.timer-card{grid-column:auto;min-height:210px;background:var(--b);color:white}.gamecard.timer-card b,.gamecard.timer-card small{color:white}.gamecard.timer-card .go{color:var(--d)}.gamecard{min-height:210px;border:4px solid var(--d);border-radius:27px;background:var(--p);box-shadow:7px 7px 0 var(--d);padding:23px;position:relative;cursor:pointer;text-align:left;overflow:hidden}.gamecard:nth-child(2){background:#ead7c3}.gamecard:nth-child(3){background:#f7e6ae}.gamecard:nth-child(4){background:#eadfd2}.gamecard:active{transform:translate(5px,5px);box-shadow:2px 2px 0 var(--d)}.emoji{font-size:55px}.gamecard b{display:block;color:var(--b);font-size:27px;letter-spacing:-1px;margin-top:12px}.gamecard small{font-weight:800;color:#77685f}.gamecard .go{position:absolute;right:17px;bottom:15px;border:3px solid var(--d);border-radius:50%;width:42px;height:42px;display:grid;place-items:center;background:white;font-weight:1000}
+.gamewrap{width:min(760px,100%);text-align:center}.gamewrap h2{margin-bottom:6px}.cup{width:min(310px,70vw);height:min(400px,50vh);margin:18px auto;border:7px solid var(--d);border-top-width:10px;border-radius:20px 20px 68px 68px;background:var(--p);position:relative;overflow:hidden;box-shadow:8px 8px 0 #2d21192b}.liquid{position:absolute;bottom:0;left:0;right:0;height:0;background:var(--br)}.liquid:before{content:"";position:absolute;left:-2%;width:104%;height:16px;top:-8px;border-radius:50%;background:#89624a}.target{position:absolute;z-index:5;left:7%;right:7%;bottom:55%;height:6px;background:var(--b);border:1px solid var(--d)}.target:after{content:"HOUSE LINE";position:absolute;right:0;bottom:9px;background:var(--g);border:2px solid var(--d);border-radius:999px;padding:4px 7px;font:1000 8px monospace}.stop{width:min(430px,95%);font-size:22px}
+.stackarea{height:380px;background:var(--p);border:4px solid var(--d);border-radius:28px;margin:20px auto;max-width:650px;position:relative;overflow:hidden}.scup{position:absolute;width:110px;height:50px;background:var(--b);border:4px solid var(--d);border-radius:8px 8px 18px 18px;left:calc(50% - 55px);bottom:15px}.moving{bottom:305px}
+.tapzone{height:320px;background:var(--p);border:4px solid var(--d);border-radius:28px;margin:20px auto;max-width:650px;position:relative;overflow:hidden}.dot{position:absolute;width:62px;height:62px;border-radius:50%;border:4px solid var(--d);background:var(--g);display:grid;place-items:center;font-weight:1000}.meter{height:55px;max-width:620px;margin:35px auto;border:4px solid var(--d);border-radius:999px;background:white;position:relative;overflow:hidden}.sweet{position:absolute;left:44%;width:12%;top:0;bottom:0;background:var(--g)}.needle{position:absolute;width:9px;top:0;bottom:0;background:var(--b)}
+.resultEmoji{font-size:76px}@media(max-width:680px){.games{grid-template-columns:1fr}.gamecard.timer-card{grid-column:1}.gamecard{min-height:155px}.panel{padding:24px 17px}}
+
+.countdown{position:fixed;inset:0;background:var(--c);background-image:radial-gradient(#7a334117 2px,transparent 2px);background-size:24px 24px;z-index:999;display:none;align-items:center;justify-content:center;color:var(--d);text-align:center}.countdown.on{display:flex}.countNum{font-size:min(42vw,260px);font-weight:1000;line-height:1;color:var(--g);text-shadow:8px 8px 0 var(--b)}.instruction{position:fixed;inset:0;background:var(--c);background-image:radial-gradient(#7a334117 2px,transparent 2px);background-size:24px 24px;z-index:998;display:none;align-items:center;justify-content:center;padding:20px}.instruction.on{display:flex}.instruction .panel{max-width:650px}.instruction .mini{font-size:55px;margin-bottom:8px}
+.preview{height:230px;border:3px solid var(--d);border-radius:22px;background:white;margin:18px 0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.previewCup{width:120px;height:155px;border:5px solid var(--d);border-radius:12px 12px 32px 32px;position:relative;overflow:hidden}.previewCup:before{content:"";position:absolute;bottom:0;left:0;right:0;height:46%;background:var(--br)}.previewCup:after{content:"HOUSE LINE";position:absolute;left:8px;right:8px;top:42%;border-top:4px solid var(--b);font:900 8px monospace;padding-top:5px;color:var(--b)}
+.previewStack:before,.previewStack:after{content:"";position:absolute;width:100px;height:43px;background:var(--b);border:4px solid var(--d);border-radius:8px 8px 16px 16px;left:calc(50% - 50px)}.previewStack:before{bottom:35px}.previewStack:after{top:35px;transform:translateX(65px)}
+.previewTap{width:70px;height:70px;border-radius:50%;border:4px solid var(--d);background:var(--g);display:grid;place-items:center;font-weight:1000;transform:translate(75px,-40px)}
+.previewTimer{font-size:58px;font-weight:1000;color:var(--b);letter-spacing:-3px}.previewTimer small{display:block;font:900 10px monospace;letter-spacing:0;color:var(--d)}
+
+/* V11 FUN PASS — visuals only */
+body{overflow-x:hidden}
+.app:before,.app:after{position:fixed;z-index:-1;font-size:90px;opacity:.07;pointer-events:none}
+.app:before{content:"★";left:3vw;bottom:4vh;transform:rotate(-15deg)}
+.app:after{content:"☺";right:4vw;top:12vh;transform:rotate(12deg)}
+.logo{position:relative;transform:rotate(-1deg);text-shadow:2px 2px 0 #e1b44f}
+.logo:after{content:"★ PLAY • WIN • COOKIE ★";display:block;font:900 8px monospace;letter-spacing:1px;color:var(--d);text-shadow:none;margin-top:2px}
+.lobbyhead h2,.gamewrap h2{display:inline-block;position:relative}
+.lobbyhead h2:after{content:"✦";position:absolute;right:-34px;top:-12px;color:var(--g);font-size:25px;animation:twinkle 1.3s ease-in-out infinite alternate}
+@keyframes twinkle{from{transform:scale(.7) rotate(0);opacity:.5}to{transform:scale(1.25) rotate(18deg);opacity:1}}
+.gamecard{transition:transform .16s ease,box-shadow .16s ease}
+.gamecard:hover{transform:translateY(-5px) rotate(-.35deg);box-shadow:9px 11px 0 var(--d)}
+.gamecard:nth-child(even):hover{transform:translateY(-5px) rotate(.35deg)}
+.gamecard .emoji{display:inline-block;filter:drop-shadow(3px 4px 0 #2d211922);animation:bob 2.2s ease-in-out infinite}
+.gamecard:nth-child(2) .emoji{animation-delay:.3s}.gamecard:nth-child(3) .emoji{animation-delay:.6s}.gamecard:nth-child(4) .emoji{animation-delay:.9s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+.gamecard:before{content:"";position:absolute;width:85px;height:85px;border:3px dashed #7a33412b;border-radius:50%;right:-25px;top:-28px}
+.gamecard:nth-child(1):after{content:"SIP!";position:absolute;right:20px;top:18px;transform:rotate(8deg);font:1000 10px monospace;background:var(--g);border:2px solid var(--d);padding:5px 8px;border-radius:999px}
+.gamecard:nth-child(2):after{content:"CATCH!";position:absolute;right:20px;top:18px;transform:rotate(-7deg);font:1000 10px monospace;background:white;border:2px solid var(--d);padding:5px 8px;border-radius:999px}
+.gamecard:nth-child(3):after{content:"FAST!";position:absolute;right:20px;top:18px;transform:rotate(6deg);font:1000 10px monospace;background:var(--p);border:2px solid var(--d);padding:5px 8px;border-radius:999px}
+.gamecard:nth-child(4):after{content:"4.321";position:absolute;right:20px;top:18px;transform:rotate(-5deg);font:1000 10px monospace;background:var(--g);color:var(--d);border:2px solid var(--d);padding:5px 8px;border-radius:999px}
+.numberbox{position:relative}.numberbox:before{content:"GOOD LUCK!";position:absolute;left:-24px;top:-18px;background:var(--g);border:2px solid var(--d);border-radius:999px;padding:5px 8px;font:1000 8px monospace;transform:rotate(-8deg)}
+.panel{background-image:linear-gradient(135deg,transparent 92%,#e1b44f40 92%)}
+.sticker{animation:wiggle 3s ease-in-out infinite}
+@keyframes wiggle{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.btn{transition:transform .12s ease,box-shadow .12s ease}.btn:hover{transform:translateY(-2px);box-shadow:7px 8px 0 var(--d)}
+.countNum{animation:pop .25s ease-out}@keyframes pop{from{transform:scale(.55) rotate(-8deg)}to{transform:scale(1) rotate(0)}}
+.resultEmoji{animation:celebrate .65s ease-in-out infinite alternate}@keyframes celebrate{from{transform:scale(.95) rotate(-8deg)}to{transform:scale(1.12) rotate(8deg)}}
+.confetti{position:fixed;pointer-events:none;z-index:1200;font-size:25px;animation:fall 1.7s linear forwards}@keyframes fall{from{transform:translateY(-10vh) rotate(0);opacity:1}to{transform:translateY(110vh) rotate(600deg);opacity:.15}}
+
+/* V12 EXTRA FUN — still OTH, just louder */
+.top{background:var(--p);border:3px solid var(--d);border-radius:20px;padding:10px 14px;box-shadow:5px 5px 0 var(--d);margin-bottom:12px}
+.lobbyhead{position:relative}.lobbyhead:before{content:"PICK YOUR POISON ↓";display:inline-block;margin-bottom:9px;font:1000 9px monospace;letter-spacing:1px;background:var(--d);color:white;padding:6px 10px;border-radius:999px;transform:rotate(-2deg)}
+.games{perspective:900px}
+.gamecard:nth-child(1){transform:rotate(-1deg)}.gamecard:nth-child(2){transform:rotate(1deg)}.gamecard:nth-child(3){transform:rotate(.7deg)}.gamecard:nth-child(4){transform:rotate(-.7deg)}
+.gamecard b{font-size:30px}.gamecard small{font-size:13px;line-height:1.35;display:block;max-width:80%}
+.gamecard .go{transition:.18s}.gamecard:hover .go{transform:rotate(-12deg) scale(1.13)}
+.gamecard:nth-child(1){background:linear-gradient(145deg,#fffaf1,#f3d9ca)}
+.gamecard:nth-child(2){background:linear-gradient(145deg,#ead7c3,#fff5e8)}
+.gamecard:nth-child(3){background:linear-gradient(145deg,#f7e6ae,#fff9df)}
+.gamecard:nth-child(4){background:linear-gradient(145deg,#7a3341,#59232e)}
+.gamecard:nth-child(4) b,.gamecard:nth-child(4) small{color:white}
+.gamecard:nth-child(4) .emoji{filter:drop-shadow(3px 3px 0 #e1b44f)}
+.gamecard:nth-child(1) .go{background:#f7e6ae}.gamecard:nth-child(2) .go{background:#fff}.gamecard:nth-child(3) .go{background:#7a3341;color:white}.gamecard:nth-child(4) .go{background:#e1b44f}
+.panel:after{content:"✦  OTH  ✦";position:absolute;left:20px;bottom:15px;font:1000 8px monospace;opacity:.22;transform:rotate(-3deg)}
+#home .panel{padding-top:42px}
+#home h1{animation:titleFloat 3s ease-in-out infinite}@keyframes titleFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+#home .panel:before{content:"🍪";opacity:.12;transform:rotate(15deg)}
+.preview{background-image:radial-gradient(#7a334114 2px,transparent 2px);background-size:18px 18px;box-shadow:inset 0 0 0 5px #fff8}
+.instruction .panel:before{content:"HOW?";font-size:80px;font-weight:1000;color:#7a33410b;right:-5px}
+.gamewrap{background:var(--p);border:4px solid var(--d);border-radius:30px;padding:25px;box-shadow:8px 8px 0 var(--d);position:relative}
+.gamewrap:after{content:"NO PRESSURE 😌";position:absolute;right:18px;top:16px;font:1000 8px monospace;background:var(--g);border:2px solid var(--d);border-radius:999px;padding:5px 8px;transform:rotate(5deg)}
+#tap .gamewrap:after{content:"MOVE MOVE MOVE!"}#gold .gamewrap:after{content:"DON'T COUNT OUT LOUD 👀"}#stack .gamewrap:after{content:"CATCH IT!"}#pour .gamewrap:after{content:"DON'T PANIC!"}
+.tapzone,.stackarea,.cup,.meter{box-shadow:6px 7px 0 #2d21192b}
+#tapCount,#tapTime{font-size:13px;background:var(--g)}
+#timeDisplay{text-shadow:4px 4px 0 #e1b44f55}
+.stop{animation:buttonPulse 1.1s ease-in-out infinite alternate}@keyframes buttonPulse{from{transform:scale(1)}to{transform:scale(1.025)}}
+.resultEmoji{font-size:95px}.resultEmoji:after{content:"";display:block}
+.homeSplit{width:100%;display:grid;grid-template-columns:1.15fr .65fr;gap:18px;align-items:center}.board{text-align:left}.board h2{font-size:38px}.winrow{border-bottom:2px dashed #cdbba8;padding:10px 2px;font:900 12px monospace}.winrow span{float:right}@media(max-width:760px){.homeSplit{grid-template-columns:1fr}.board{display:none}}.countdown{background:#2d2119b8!important;backdrop-filter:blur(2px)}</style></head><body><div class="app"><div class="top"><div class="logo">ON THE HOUSE</div><div id="badge" class="ticket">HOUSE ARCADE ★</div></div>
+<section id="home" class="screen on"><div class="homeSplit"><div class="panel"><div class="sticker">WELCOME TO THE HOUSE</div><h1>YOUR ORDER.<br>YOUR GAME.</h1><p>Got your number? Enter it and take your shot at a cookie.</p><div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:12px 0"><span class="ticket">1 ORDER</span><span class="ticket">1 GAME</span><span class="ticket">1 SHOT 🍪</span></div><div class="numberbox"><label>WHAT'S YOUR NUMBER?</label><input id="num" inputmode="numeric" placeholder="000"></div><button id="enter" class="btn" style="margin-top:22px">ENTER THE HOUSE →</button>
+<div style="margin-top:18px"><button id="staffDemo" class="btn" style="background:var(--p);color:var(--b);font-size:11px;padding:11px 17px;box-shadow:4px 4px 0 var(--d)">STAFF DEMO 👀</button></div>
+<div id="err" class="error"></div></div><div class="panel board"><div class="sticker">TODAY AT THE HOUSE</div><h2><span id="todayWins">0</span> WINNERS 🍪</h2><p>Can you beat the house?</p><div id="recentWins" class="winlist">No winners yet. Be the first.</div></div></div></section>
+<section id="lobby" class="screen" style="position:relative"><button id="backLobby" class="backBtn">← BACK</button><div class="lobby"><div class="lobbyhead"><div class="sticker">ORDER <span id="lobbyNum"></span></div><h2>PICK YOUR GAME.</h2><p>One order. One game. One shot.</p></div><div class="games">
+<div class="gamecard" data-game="Stop the Pour"><div class="emoji">🥤</div><b>STOP THE POUR</b><small>Fill starts. Line moves. Stop at the perfect moment.</small><div class="go">→</div></div>
+<div class="gamecard" data-game="Catch the Cup"><div class="emoji">🥛</div><b>CATCH THE CUP</b><small>Drag the tray and catch the falling cups before they hit the floor.</small><div class="go">→</div></div>
+<div class="gamecard" data-game="House Tap"><div class="emoji">✦</div><b>HOUSE TAP</b><small>Catch the house mark before time runs out.</small><div class="go">→</div></div>
+<div class="gamecard timer-card" data-game="4.321 Timer"><div class="emoji">⏱️</div><b>4.321 TIMER</b><small>Can you stop a hidden clock at exactly 4.321 seconds?</small><div class="go">→</div></div>
+</div></div></section>
+<section id="pour" class="screen"><div class="gamewrap"><div class="sticker">STOP THE POUR</div><h2>WATCH THE LINE.</h2><p>The cup fills automatically. Stop it when the drink meets the moving House Line.</p><div class="cup"><div id="target" class="target"></div><div id="liquid" class="liquid"></div></div><button id="stopPour" class="btn stop">STOP!</button></div></section>
+<section id="stack" class="screen"><div class="gamewrap"><div class="sticker">CATCH THE CUP</div><h2>DON'T LET IT DROP.</h2><p>Drag the tray left and right. Catch 5 cups before you miss 3.</p><div id="catchStats" class="ticket" style="display:inline-block;margin:8px">CAUGHT 0/5 · MISSED 0/3</div><div id="catchArea" class="stackarea" style="touch-action:none"><div id="fallCup" style="position:absolute;font-size:54px;left:50%;top:-65px">🥛</div><div id="tray" style="position:absolute;width:145px;height:24px;background:var(--b);border:4px solid var(--d);border-radius:999px;left:calc(50% - 72px);bottom:18px;box-shadow:0 8px 0 #2d21192b"></div></div></div></section>
+<section id="tap" class="screen"><div class="gamewrap"><div class="sticker">HOUSE TAP</div><h2>CATCH THE MARK.</h2><p>Tap the moving mark 5 times before the clock runs out.</p><div id="tapzone" class="tapzone"><div id="dot" class="dot">OTH</div></div><div style="display:flex;justify-content:center;gap:10px"><div id="tapCount" class="ticket">0 / 10</div><div id="tapTime" class="ticket">8.0s LEFT</div></div></div></section>
+<section id="gold" class="screen"><div class="gamewrap"><div class="sticker">4.321 CHALLENGE</div><h2>TRUST YOUR CLOCK.</h2><p>Target: <b>4.321 seconds</b>. You'll see the clock briefly — then it disappears. Stop it as close as you can.</p><div id="timeDisplay" style="font-size:clamp(65px,13vw,120px);font-weight:1000;color:var(--b);letter-spacing:-5px;margin:48px 0 12px">0.000</div><div id="hiddenClock" class="ticket" style="display:none;margin:0 auto 25px;width:max-content">CLOCK HIDDEN 👀</div><button id="stopTime" class="btn stop">STOP!</button></div></section>
+<section id="result" class="screen"><div class="panel"><div id="resEmoji" class="resultEmoji">🍪</div><div id="resSticker" class="sticker">YOU BEAT THE HOUSE</div><h1 id="resTitle">YOU WON<br>A COOKIE!</h1><p id="resText"></p><button id="done" class="btn">DONE →</button></div></section>
+</div>
+<div id="instruction" class="instruction"><button id="backInstruction" class="backBtn">← BACK</button><div class="panel"><div id="instEmoji" class="mini">🎮</div><div class="sticker">HOW TO PLAY</div><h2 id="instTitle">GAME</h2><p id="instText"></p><div id="instPreview" class="preview"></div><button id="instReady" class="btn">I'M READY →</button></div></div>
+<div id="countdown" class="countdown"><div><div id="countNum" class="countNum">3</div><p style="color:var(--b)">GET READY</p></div></div>
+<script>
+const DB="https://on-the-house-f4d6d-default-rtdb.europe-west1.firebasedatabase.app";
+async function get(p){let r=await fetch(`${DB}/${p}.json?ts=${Date.now()}`,{cache:"no-store"});if(!r.ok)throw 0;return r.json()}
+async function patch(p,v){let r=await fetch(`${DB}/${p}.json`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(v)});if(!r.ok)throw 0}
+const screens=[...document.querySelectorAll(".screen")];function show(id){screens.forEach(s=>s.classList.toggle("on",s.id===id))}
+let order=null,game=null,raf=null,finished=false,demoMode=false;
+enter.onclick=async()=>{let n=num.value.replace(/\D/g,"");err.textContent="CHECKING…";try{let o=await get("final/orders/"+n);if(!o){err.textContent="WE CAN'T FIND THAT ORDER.";return}if(o.status!=="active"){err.textContent="THAT NUMBER HAS ALREADY PLAYED.";return}order=n;badge.textContent="ORDER #"+n;lobbyNum.textContent="#"+n;err.textContent="";show("lobby")}catch(e){err.textContent="CONNECTION ERROR — ASK THE CASHIER."}}
+const instructions={
+"Stop the Pour":["🥤","STOP THE POUR","The drink fills by itself while the House Line moves. Press STOP when the top of the drink meets the line."],
+"Catch the Cup":["🥛","CATCH THE CUP","Drag the tray left and right. Catch 5 falling cups before you miss 3."],
+"House Tap":["✦","HOUSE TAP","Catch the moving OTH mark 10 points before 8 seconds runs out. Tap fast."],
+"4.321 Timer":["⏱️","4.321 TIMER","The target is exactly 4.321 seconds. The clock disappears after 0.8 seconds — keep counting in your head and press STOP."]
+};
+let pendingGame=null;
+document.querySelectorAll(".gamecard").forEach(c=>c.onclick=()=>{pendingGame=c.dataset.game;let a=instructions[pendingGame];instEmoji.textContent=a[0];instTitle.textContent=a[1];instText.textContent=a[2];
+const previews={
+"Stop the Pour":'<div class="previewCup"></div>',
+"Catch the Cup":'<div style="font-size:70px">🥛<br><span style="font-size:55px">▰</span></div>',
+"House Tap":'<div class="previewTap">OTH</div>',
+"4.321 Timer":'<div class="previewTimer">4.321<small>TARGET TIME</small></div>'
+};instPreview.innerHTML=previews[pendingGame]||"";instruction.classList.add("on")});
+function tone(freq,dur=.12){try{let a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=freq;g.gain.value=.12;o.start();o.stop(a.currentTime+dur)}catch(e){}}
+async function countdownThenStart(){instruction.classList.remove("on");game=pendingGame;const targetScreen=game==="Stop the Pour"?"pour":game==="Catch the Cup"?"stack":game==="House Tap"?"tap":"gold";show(targetScreen);countdown.classList.add("on");for(const [v,f] of [["3",520],["2",520],["1",520],["GO!",900]]){countNum.textContent=v;tone(f,v==="GO!"?.22:.1);await new Promise(r=>setTimeout(r,v==="GO!"?400:650))}countdown.classList.remove("on");if(!demoMode){try{await patch("final/orders/"+order,{status:"playing",game,startedAt:Date.now()})}catch(e){alert("Connection lost. Ask the cashier.");show("lobby");return}}if(game==="Stop the Pour")startPour();if(game==="Catch the Cup")startCatch();if(game==="House Tap")startTap();if(game==="4.321 Timer")startTime()}
+backInstruction.onclick=()=>{instruction.classList.remove("on");pendingGame=null};
+backLobby.onclick=()=>{order=null;game=null;pendingGame=null;demoMode=false;num.value="";badge.textContent="HOUSE ARCADE ★";show("home")};
+instReady.onclick=countdownThenStart;
+
+function confettiBurst(){
+ const bits=["★","✦","●","🍪"];
+ for(let i=0;i<24;i++){let e=document.createElement("div");e.className="confetti";e.textContent=bits[i%bits.length];e.style.left=(Math.random()*100)+"vw";e.style.top=(-5-Math.random()*25)+"vh";e.style.animationDelay=(Math.random()*.45)+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),2400)}
+}
+
+async function end(win){if(finished)return;finished=true;cancelAnimationFrame(raf);let cookie=win?(Math.random()<.5?"NUTELLA":"OREO"):null;if(!demoMode){try{await patch("final/orders/"+order,{status:win?"winner":"lost",won:win,game,cookie,finishedAt:Date.now()})}catch(e){}}resEmoji.textContent=win?"🍪":"🏠";resSticker.textContent=win?"YOU BEAT THE HOUSE":"THE HOUSE WINS";resTitle.innerHTML=win?"YOU WON<br>A COOKIE!":"NOT THIS<br>TIME!";resText.textContent=demoMode?(win?"Demo win — no cookie is recorded.":"Demo finished — nothing was recorded."):win?`You got a ${cookie} cookie 🍪 — show the cashier!`:`Order #${order} has finished its play.`;if(win){tone(880,.12);setTimeout(()=>tone(1120,.18),140);confettiBurst()}else{tone(220,.28)}show("result")}
+let fill=0,line=45,ldir=1,last=0;
+function startPour(){finished=false;fill=0;line=38+Math.random()*34;ldir=Math.random()<.5?-1:1;last=0;liquid.style.height="0%";function loop(t){if(!last)last=t;let dt=Math.min(30,t-last);last=t;fill=Math.min(100,fill+dt*.025);line+=ldir*dt*.042;if(line>=78){line=78;ldir=-1}else if(line<=30){line=30;ldir=1};target.style.bottom=line+"%";liquid.style.height=fill+"%";if(fill>=100)return end(false);raf=requestAnimationFrame(loop)}raf=requestAnimationFrame(loop)}
+stopPour.onclick=()=>end(Math.abs(fill-line)<=1.15);
+let catchX=0,cupX=0,cupY=-65,caught=0,missed=0,catchLast=0;
+function startCatch(){
+ finished=false;caught=0;missed=0;catchLast=0;setTimeout(()=>{let a=catchArea.getBoundingClientRect();catchX=a.width/2-72;tray.style.left=catchX+"px";resetCup();raf=requestAnimationFrame(catchLoop)},50)
+}
+function resetCup(){let a=catchArea.getBoundingClientRect();cupX=20+Math.random()*Math.max(20,a.width-90);cupY=-65;fallCup.style.left=cupX+"px";fallCup.style.top=cupY+"px"}
+function catchLoop(t){
+ if(finished)return;if(!catchLast)catchLast=t;let dt=Math.min(32,t-catchLast);catchLast=t;cupY+=dt*.25;fallCup.style.top=cupY+"px";
+ let a=catchArea.getBoundingClientRect(), trayY=a.height-42;
+ if(cupY+50>=trayY && cupY< trayY+30 && cupX+45>=catchX && cupX<=catchX+145){caught++;catchStats.textContent=`CAUGHT ${caught}/5 · MISSED ${missed}/3`;tone(760,.06);if(caught>=5)return end(true);resetCup()}
+ else if(cupY>a.height){missed++;catchStats.textContent=`CAUGHT ${caught}/5 · MISSED ${missed}/3`;tone(220,.08);if(missed>=3)return end(false);resetCup()}
+ raf=requestAnimationFrame(catchLoop)
+}
+function moveTray(clientX){let r=catchArea.getBoundingClientRect();catchX=Math.max(0,Math.min(r.width-145,clientX-r.left-72));tray.style.left=catchX+"px"}
+catchArea.addEventListener("pointerdown",e=>{catchArea.setPointerCapture?.(e.pointerId);moveTray(e.clientX)});
+catchArea.addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="touch")moveTray(e.clientX)});
+let taps=0,tapStart=0;
+function moveDot(){let z=tapzone.getBoundingClientRect();dot.style.left=Math.max(0,Math.random()*(z.width-70))+"px";dot.style.top=Math.max(0,Math.random()*(z.height-70))+"px"}
+function startTap(){finished=false;taps=0;tapCount.textContent="0 / 10";tapTime.textContent="8.0s LEFT";setTimeout(()=>{moveDot();tapStart=performance.now();function loop(t){let left=Math.max(0,8000-(t-tapStart));tapTime.textContent=(left/1000).toFixed(1)+"s LEFT";if(left<=0)return end(false);raf=requestAnimationFrame(loop)}raf=requestAnimationFrame(loop)},60)}
+dot.onclick=e=>{e.stopPropagation();if(finished)return;taps++;tapCount.textContent=taps+" / 10";if(taps>=10)return end(true);moveDot()}
+let timerStart=0,timerStopped=false;
+function startTime(){
+ finished=false;timerStopped=false;timeDisplay.style.display="block";hiddenClock.style.display="none";timeDisplay.textContent="0.000";timerStart=performance.now();
+ function loop(t){let elapsed=(t-timerStart)/1000;if(elapsed<0.8){timeDisplay.textContent=elapsed.toFixed(3)}else{timeDisplay.style.display="none";hiddenClock.style.display="block"}if(elapsed>=8)return revealTime(elapsed);raf=requestAnimationFrame(loop)}raf=requestAnimationFrame(loop)
+}
+function revealTime(elapsed){
+ if(timerStopped)return;timerStopped=true;cancelAnimationFrame(raf);timeDisplay.style.display="block";hiddenClock.style.display="none";timeDisplay.textContent=elapsed.toFixed(3);
+ const diff=Math.abs(elapsed-4.321);setTimeout(()=>end(diff<=0.08),900)
+}
+stopTime.onclick=()=>{if(timerStopped)return;revealTime((performance.now()-timerStart)/1000)};
+staffDemo.onclick=()=>{demoMode=true;order="DEMO";badge.textContent="STAFF DEMO";lobbyNum.textContent="DEMO";err.textContent="";show("lobby")};
+async function refreshBoard(){try{let raw=await get("final/orders")||{},a=Object.values(raw).filter(o=>o.won).sort((x,y)=>(y.finishedAt||0)-(x.finishedAt||0));todayWins.textContent=a.length;recentWins.innerHTML=a.length?a.slice(0,5).map(o=>`<div class="winrow">ORDER #${o.number}<span>🍪</span></div>`).join(""):"No winners yet. Be the first."}catch(e){}}refreshBoard();setInterval(refreshBoard,4000);done.onclick=()=>{order=null;game=null;finished=false;demoMode=false;num.value="";badge.textContent="HOUSE ARCADE ★";show("home")}
+</script></body></html>
